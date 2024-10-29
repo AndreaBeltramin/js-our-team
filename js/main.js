@@ -43,17 +43,17 @@ let cardsHtml = ``;
 teamMembers.forEach((member) => {
 	const memberCard = `
         <div class="col">
-            <div class="card bg-dark bg-gradient text-white h-100">
+            <div class="card text-bg-dark h-100">
                 <div class="row g-0 h-100">
-                    <div class="col-md-4">
+                    <div class="col col-md-4">
                         <img
                             src="./assets/${member.img}"
                             class="img-fluid rounded-start"
                             alt="${member.name} + ${member.role}"
                         />
                     </div>
-                    <div class="col-md-8 h-100">
-                        <div class="p-2 h-100">
+                    <div class="col col-md-8 h-100">
+                        <div class="p-2">
                             <h5 class="card-title text-uppercase">${member.name}</h5>
                             <p class="card-text">${member.role}</p>
                             <p class="card-text fs-6 text-primary">
@@ -66,4 +66,24 @@ teamMembers.forEach((member) => {
         </div>`;
 	cardsHtml += memberCard;
 });
+
 teamCardsGroup.innerHTML = cardsHtml;
+
+//aggiungo la card per un nuovo membro
+const addNewMember = document.getElementById("addNewMember");
+const newMemberName = document.getElementById("name");
+const newMemberRole = document.getElementById("role");
+const newMemberEmail = document.getElementById("email");
+const newMemberImg = document.getElementById("img");
+
+addNewMember.addEventListener("click", () => {
+	const name = newMemberName.value;
+	const role = newMemberRole.value;
+	const email = newMemberEmail.value;
+	const img = newMemberImg.value;
+
+	const newMember = { name, role, email, img };
+	teamMembers.push(newMember);
+
+	teamCardsGroup.innerHTML += newMember;
+});
