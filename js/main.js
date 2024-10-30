@@ -37,53 +37,74 @@ const teamMembers = [
 	},
 ];
 
-const teamCardsGroup = document.getElementById("teamCardsGroup");
-let cardsHtml = ``;
-
-teamMembers.forEach((member) => {
-	const memberCard = `
+//creo una funzione in cui genero le card dei membri del team partendo dall'html
+const generateMemberCard = (name, role, email, img) => {
+	return `
         <div class="col">
             <div class="card text-bg-dark h-100">
                 <div class="row g-0 h-100">
-                    <div class="col col-md-4">
+                    <div class="col h-100">
                         <img
-                            src="./assets/${member.img}"
-                            class="img-fluid rounded-start"
-                            alt="${member.name} + ${member.role}"
+                            src="./assets/${img}"
+                            class="img-fluid h-100 rounded-start"
+                            alt="${name} + ${role}"
                         />
                     </div>
-                    <div class="col col-md-8 h-100">
-                        <div class="p-2">
-                            <h5 class="card-title text-uppercase">${member.name}</h5>
-                            <p class="card-text">${member.role}</p>
+                    <div class="col h-100">
+                        <div class="p-2 h-100 ">
+                            <h5 class="card-title text-uppercase mt-3">${name}</h5>
+                            <p class="card-text">${role}</p>
                             <p class="card-text fs-6 text-primary">
-                                ${member.email}
+                                ${email}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>`;
-	cardsHtml += memberCard;
-});
+};
 
-teamCardsGroup.innerHTML = cardsHtml;
+//creo una funzione per stampare le card per ogni membro del team nell'html
+const printMemberCards = (container, members) => {
+	let cardsHtml = ``;
+	members.forEach((member) => {
+		const { name, role, email, img } = member;
+		const memberCard = generateMemberCard(name, role, email, img);
+		cardsHtml += memberCard;
+	});
 
-//aggiungo la card per un nuovo membro
-const addNewMember = document.getElementById("addNewMember");
+	//e aggiugno le card all'html
+	container.innerHTML = cardsHtml;
+};
+
+//recupero il gruppo di card e invoco la funzione
+const teamCardsGroup = document.getElementById("teamCardsGroup");
+printMemberCards(teamCardsGroup, teamMembers);
+
+//creo la card per un nuovo membro da aggiungere:
+//recupero i valori che inserisce l'utente e il bottone
+//e creo delle costanti con i valori
+const addNewMemberButton = document.getElementById("addNewMemberButton");
 const newMemberName = document.getElementById("name");
 const newMemberRole = document.getElementById("role");
 const newMemberEmail = document.getElementById("email");
 const newMemberImg = document.getElementById("img");
 
-addNewMember.addEventListener("click", () => {
+//al click del bottone
+addNewMemberButton.addEventListener("click", () => {
+	//inserisco i valori dell'utente nelle proprietà dell'oggetto member
 	const name = newMemberName.value;
 	const role = newMemberRole.value;
 	const email = newMemberEmail.value;
 	const img = newMemberImg.value;
 
 	const newMember = { name, role, email, img };
+	//aggiungo a teamMembers il nuovo membro
 	teamMembers.push(newMember);
 
-	teamCardsGroup.innerHTML += newMember;
+	//genero la card del nuovo membro del team
+	const newMemberCard = generateMemberCard(name, role, email, img);
+	//stampo la card del nuovo membro del team
+	//invocando la funzione per stampare nell'html la card
+	printMemberCards(teamCardsGroup, teamMembers);
 });
